@@ -1,19 +1,36 @@
-function Header() {
-        return <header className="navbar"> 
+import { useState } from 'react';
+import Search from './Search';
+import Filter from './Filter';
+
+function Header({ searchMovies }) {
+    const [currentType, setCurrentType] = useState('all');
+    const [currentQuery, setCurrentQuery] = useState('');
+
+    const handleSearch = (query) => {
+        setCurrentQuery(query);
+        searchMovies(query, currentType);
+    };
+
+    const handleFilterChange = (type) => {
+        setCurrentType(type);
+        if (currentQuery) {
+            searchMovies(currentQuery, type);
+        }
+    };
+
+    return (
+        <header className="navbar">
             <div className="navbar__logo">
                 <a href="/">
-                    <h1>MoviesProject</h1>
+                    <h1>🎬 MoviesProject</h1>
                 </a>
             </div>
-
-            <nav className="navbar__nav">  
-                <ul className="nav-links">
-                    <li><a href="page1.html">Новинки</a></li>
-                    <li><a href="page2.html">Фильмы</a></li>
-                    <li><a href="page3.html">Сериалы</a></li>
-                </ul>
-            </nav>
+            <Search onSearch={handleSearch} />
+            <Filter onFilterChange={handleFilterChange} initialType={currentType} />
         </header>
+    );
 }
 
-export default Header
+export default Header;
+
+
